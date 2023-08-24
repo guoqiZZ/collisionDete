@@ -124,22 +124,22 @@ namespace xxxlCGA
 		Eigen::Vector3f getExtent() const;
 		void setExtent(const Eigen::Vector3f& extent);
 	private:
-		//è®¡ç®—å¹³å‡å€¼
+		//¼ÆËãÆ½¾ùÖµ
 		bool computeMeanValue(const std::vector<Eigen::Vector3f>& pointCloud, Eigen::Vector3f& meanValue);
 
-		//è®¡ç®—åæ–¹å·®çŸ©é˜µ
+		//¼ÆËãĞ­·½²î¾ØÕó
 		bool computeCovarianceMatrix(const std::vector<Eigen::Vector3f>& pointCloud, const Eigen::Vector3f& meanValue, Eigen::Matrix3f& covarianceMatrix);
 
-		//æ›´åŠ åæ–¹å·®çŸ©é˜µè®¡ç®—åŒ…å›´ç›’çš„ä¸»ã€ä¸­ã€æ¬¡è½´
+		//¸ü¼ÓĞ­·½²î¾ØÕó¼ÆËã°üÎ§ºĞµÄÖ÷¡¢ÖĞ¡¢´ÎÖá
 		bool computeEigenVectors(const Eigen::Matrix3f& covariance_matrix, Eigen::Vector3f& major_axis, Eigen::Vector3f& middle_axis, Eigen::Vector3f& minor_axis, float& major_value, float& middle_value, float& minor_value);
 
-		//è®¡ç®—è½´å‘é•¿åº¦
+		//¼ÆËãÖáÏò³¤¶È
 		float computeLengthAlongAxis(const std::vector<Eigen::Vector3f>& pointCloud, const Eigen::Vector3f& axis, Plane& midPlane);
 
-		//è®¡ç®—ä¸¤ä¸ªå¹³é¢çš„äº¤çº¿
+		//¼ÆËãÁ½¸öÆ½ÃæµÄ½»Ïß
 		int isTwoPlaneIntersected(const Plane& Pn1, const Plane& Pn2, Line<float>& isctLine);
 
-		//è®¡ç®—çº¿å’Œå¹³é¢çš„äº¤ç‚¹
+		//¼ÆËãÏßºÍÆ½ÃæµÄ½»µã
 		int isLineIntersectWithPlane(const Line<float>& line, const Plane& plane, Eigen::Vector3f& isctPt);
 
 		bool obbDisjoint(const Eigen::Transform<float, 3, Eigen::Isometry>& tf, const Eigen::Vector3f& a, const Eigen::Vector3f& b) const;
@@ -162,40 +162,40 @@ namespace xxxlCGA
 	class OBBTree
 	{
 	public:
-		// BVH æ„é€ 
+		// BVH ¹¹Ôì
 		struct BVH_node {
 			OBB* obb = nullptr;
 			BVH_node* left = nullptr;
 			BVH_node* right = nullptr;
 			Eigen::MatrixX3d V;
 			Eigen::MatrixX3i F;
-			std::map<int, int> originalIndex;// åŸæœ‰ç‚¹çš„ç´¢å¼•,keyä¸ºç°åœ¨ç‚¹çš„ç´¢å¼•valueä¸ºåœ¨åŸæ¨¡å‹ä¸Šç‚¹çš„ç´¢å¼•
+			std::map<int, int> originalIndex;// Ô­ÓĞµãµÄË÷Òı,keyÎªÏÖÔÚµãµÄË÷ÒıvalueÎªÔÚÔ­Ä£ĞÍÉÏµãµÄË÷Òı
 		};
 		OBBTree(const pmp::SurfaceMesh* mesh, int treeHeight);
-		OBBTree(const Eigen::MatrixX3d& V, const Eigen::MatrixX3i& F, int treeHeight);//treeHeightä¸ºè¿­ä»£æ¬¡æ•°å³æ„å»ºçš„äºŒå‰æ ‘çš„æ ‘é«˜
+		OBBTree(const Eigen::MatrixX3d& V, const Eigen::MatrixX3i& F, int treeHeight);//treeHeightÎªµü´ú´ÎÊı¼´¹¹½¨µÄ¶ş²æÊ÷µÄÊ÷¸ß
 		~OBBTree();
 
 		BVH_node* buildOBBTree(const Eigen::MatrixX3d& V, const Eigen::MatrixX3i& F, BVH_node* root, std::map<int, int> originalIndex, int treeHeight);
 
-		//è®¡ç®—å°„çº¿ä¸æ¨¡å‹çš„äº¤ç‚¹
+		//¼ÆËãÉäÏßÓëÄ£ĞÍµÄ½»µã
 		std::vector<Eigen::Vector3f> rayIntersection(const Eigen::Vector3f& startPoint, const Eigen::Vector3f& dir);
-		/// æ›´æ–°
+		/// ¸üĞÂ
 		bool dirtyTree(const Eigen::Matrix4f& mat);
 	protected:
 	private:
-		//åˆ†å‰²è¾“å…¥ç‚¹é›†å’Œé¢ç‰‡é›†åˆ
+		//·Ö¸îÊäÈëµã¼¯ºÍÃæÆ¬¼¯ºÏ
 		void splitPoints(BVH_node* father
 			, std::vector<Eigen::Vector3d>& vLeft_vector, std::vector<Eigen::Vector3d>& vRight_vector
 			, std::vector<Eigen::Vector3i>& fLeft_vector, std::vector<Eigen::Vector3i>& fRight_vector
 			, std::map<int, int>& originalLeftIndex, std::map<int, int>& originalRightIndex);
-		// å®šä¹‰ä¸€ä¸ªé€’å½’å‡½æ•°æ¥æ›´æ–°OBBæ ‘çš„æ¯ä¸ªèŠ‚ç‚¹
+		// ¶¨ÒåÒ»¸öµİ¹éº¯ÊıÀ´¸üĞÂOBBÊ÷µÄÃ¿¸ö½Úµã
 		void updateOBBTree(BVH_node* node, const Eigen::Matrix4f& mat);
-		//è®¡ç®—å°„çº¿ä¸è¿™ä¸ªobbNodeæ˜¯å¦ç›¸äº¤
+		//¼ÆËãÉäÏßÓëÕâ¸öobbNodeÊÇ·ñÏà½»
 		bool nodeIntersection(const Eigen::Vector3f& startPoint, const Eigen::Vector3f& dir, const OBB& node);
-		//M-Tç®—æ³•
+		//M-TËã·¨
 		bool rayTriangleIntersect(const Eigen::Vector3f& v0, const Eigen::Vector3f& v1, const Eigen::Vector3f& v2, const Eigen::Vector3f& orig
 			, const Eigen::Vector3f& dir, float& tnear, float& u, float& v);
-		//å°„çº¿ä¸ç«‹æ–¹ä½“ç›¸äº¤
+		//ÉäÏßÓëÁ¢·½ÌåÏà½»
 		bool cubrIntersect(const Eigen::Vector3f& startPoint, const Eigen::Vector3f& dir, const OBB& box, float& t0, float& t1);
 	public:
 		BVH_node* root_ = nullptr;
@@ -257,22 +257,22 @@ namespace xxxlCGA
 	public:
 		CollisionDete();
 		~CollisionDete() {};
-		/// OBBTree 1,2;å†…éƒ¨ä¸ç»´æŠ¤OBBæ ‘çš„æœ‰æ•ˆæ€§,è°ƒç”¨å‰è¯·æ›´æ–°OBBTree
+		/// OBBTree 1,2;ÄÚ²¿²»Î¬»¤OBBÊ÷µÄÓĞĞ§ĞÔ,µ÷ÓÃÇ°Çë¸üĞÂOBBTree
 		bool collisionDetection(OBBTree* _obbTree1, OBBTree* _obbTree2);
 	private:
 		bool isCollisionTree(xxxlCGA::OBBTree::BVH_node& p, xxxlCGA::OBBTree::BVH_node& q);
-		// è®¡ç®—ä¸¤ä¸ªå‘é‡åœ¨ä¸€æ¡ç›´çº¿ä¸Šçš„æŠ•å½±ï¼Œè¿”å›æŠ•å½±çš„æœ€å°å€¼å’Œæœ€å¤§å€¼
+		// ¼ÆËãÁ½¸öÏòÁ¿ÔÚÒ»ÌõÖ±ÏßÉÏµÄÍ¶Ó°£¬·µ»ØÍ¶Ó°µÄ×îĞ¡ÖµºÍ×î´óÖµ
 		void project(const Eigen::Vector3d& u, const Eigen::Vector3d& v, double& min, double& max);
-		// åˆ¤æ–­ä¸¤ä¸ªæŠ•å½±æ˜¯å¦é‡å ï¼Œè¿”å›å¸ƒå°”å€¼
+		// ÅĞ¶ÏÁ½¸öÍ¶Ó°ÊÇ·ñÖØµş£¬·µ»Ø²¼¶ûÖµ
 		bool overlapPro(double min1, double max1, double min2, double max2);
-		//åˆ¤æ–­ä¸¤ä¸ªä¸‰è§’å½¢æ˜¯å¦ç›¸äº¤ï¼Œä½¿ç”¨åˆ†ç¦»è½´ç†è®º
+		//ÅĞ¶ÏÁ½¸öÈı½ÇĞÎÊÇ·ñÏà½»£¬Ê¹ÓÃ·ÖÀëÖáÀíÂÛ
 		bool intersect(std::vector<Eigen::Vector3d> T1, std::vector<Eigen::Vector3d> T2);
 		bool TriSegIntersection(Eigen::Vector3d P0, Eigen::Vector3d P1, Eigen::Vector3d P2, Eigen::Vector3d A, Eigen::Vector3d B, Eigen::Vector3d& P);
 		bool PointInTri(Eigen::Vector3d P, Eigen::Vector3d P0, Eigen::Vector3d P1, Eigen::Vector3d P2);
 		double Area2(Eigen::Vector3d A, Eigen::Vector3d B, Eigen::Vector3d C);
 		int dcmp(double x);
 
-		//è®¡ç®—ç›¸äº¤çš„å¶å­èŠ‚ç‚¹ä»¬å…±åŒçš„ç¥–å…ˆ
+		//¼ÆËãÏà½»µÄÒ¶×Ó½ÚµãÃÇ¹²Í¬µÄ×æÏÈ
 		xxxlCGA::OBBTree::BVH_node* lowestCommonAncestor(xxxlCGA::OBBTree::BVH_node* root, std::vector<xxxlCGA::OBBTree::BVH_node*>leafs);
 	public:
 		std::vector<std::pair<std::vector<Eigen::Vector3d>, std::vector<Eigen::Vector3d>>> tOverlap_;
@@ -283,7 +283,7 @@ namespace xxxlCGA
 		std::vector<std::pair<int, double>> overlapDepth1_;
 		std::vector<std::pair<int, double>> overlapDepth2_;
 	private:
-		std::vector<xxxlCGA::OBBTree::BVH_node*> vLeafsCollision1_;// ç¢°æ’çš„å¶å­èŠ‚ç‚¹é›†åˆ
-		std::vector<xxxlCGA::OBBTree::BVH_node*> vLeafsCollision2_;// ç¢°æ’çš„å¶å­èŠ‚ç‚¹é›†åˆ
+		std::vector<xxxlCGA::OBBTree::BVH_node*> vLeafsCollision1_;// Åö×²µÄÒ¶×Ó½Úµã¼¯ºÏ
+		std::vector<xxxlCGA::OBBTree::BVH_node*> vLeafsCollision2_;// Åö×²µÄÒ¶×Ó½Úµã¼¯ºÏ
 	};
 }
